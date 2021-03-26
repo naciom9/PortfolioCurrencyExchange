@@ -1,0 +1,8 @@
+export const ADD_RATES = 'ADD_RATES';
+export const FAILED_RATE = 'FAILED_RATE';
+
+export const ADD_USERS = 'ADD_USERS';
+export const USERS_FAILED = 'USERS_FAILED';
+
+export const ADD_DECORATIONS = 'ADD_DECORATIONS';
+export const DECORATION_FAILED = 'DECORATION_FAILED';
