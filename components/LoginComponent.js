@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import { Input, CheckBox } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 class Login extends Component {
 
@@ -98,7 +97,7 @@ class Login extends Component {
                     <Button
                         onPress={() => this.signIn()}
                         title='Login'
-                        color='#5637DD'
+                        color='#0693E3'
                     />
                 </View>
             </View>

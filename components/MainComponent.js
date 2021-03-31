@@ -87,7 +87,7 @@ const CustomDrawerContentComponent = props => (
             <View style={styles.drawerHeader}>
                 <View style={{ flex: 1 }}>
                     <Image
-                        source={require('./images/money-changer-logo.jpg')}
+                        source={require('./images/logo.jpg')}
                         style={styles.drawerImage}
                     />
                 </View>
@@ -186,7 +186,8 @@ const styles = StyleSheet.create({
     drawerImage: {
         margin: 10,
         height: 60,
-        width: 60
+        width: 60,
+        borderRadius: 15
     },
 
     stackIcon: {

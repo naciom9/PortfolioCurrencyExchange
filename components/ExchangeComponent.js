@@ -3,6 +3,9 @@ import {
     View, Text, ScrollView,
     StyleSheet, TextInput, Picker, Button, Image
 } from 'react-native';
+import { connect } from 'react-redux';
+import { Tile } from 'react-native-elements';
+import { addHistory } from '../redux/ActionCreators';
 
 
 class Exchange extends Component {
@@ -51,6 +54,12 @@ class Exchange extends Component {
                 console.log(response);
                 const toObj = response.rates[this.state.toCurrency];
                 this.setState({ converted: toObj["rate_for_amount"] });
+                this.props.addHistory({
+                    convertedFrom: this.state.fromCurrency,
+                    convertedTo: this.state.toCurrency,
+                    amount: this.state.input,
+                    convertedAmount: toObj["rate_for_amount"]
+                });
             })
             .catch(err => {
                 console.error(err);
@@ -71,12 +80,13 @@ class Exchange extends Component {
         return (
             // <Animatable.View animation='lightSpeedIn' duration={1000}>
             <ScrollView>
-                {/* <View style={styles.imageContainer}>
-                    <Image
-                        source={require('./images/money-changer-logo.jpg')}
-                        style={styles.image}
+                <View style={styles.imageContainer}>
+                    <Tile
+                        imageSrc={require('./images/BlackBroker.jpg')}
+                        title="24/7 xChange Concierge"
+                        contentContainerStyle={{ height: 70 }}
                     />
-                </View> */}
+                </View>
                 <View style={styles.container}>
                     <View>
                         <TextInput style={styles.input} value={this.state.input} onChangeText={input => this.setState({ input })} placeholder="Input amount" />
@@ -138,9 +148,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         height: 40,
         textAlign: 'center'
-    }
-});
-const typography = StyleSheet.create({
+    },
     header: {
         color: '#61dafb',
         fontSize: 25,
@@ -148,15 +156,19 @@ const typography = StyleSheet.create({
     },
     imageContainer: {
         flex: 1,
-        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        position: 'relative',
+        overflow: 'hidden',
         margin: 10
     },
     image: {
-        width: 60,
-        height: 60
+        width: 80,
+        height: 80
     }
 });
 
-export default Exchange;
+const mapDispatchToProps = {
+    addHistory
+};
+
+export default connect(null, mapDispatchToProps)(Exchange);

@@ -1,24 +1,25 @@
-import { createStore } from 'redux';
+import { combineReducers, createStore } from 'redux';
 import { history } from './history';
 import { users } from './users';
-import { persistStore, persistCombineReducers } from 'redux-persist';
-import storage from 'redux-persist/es/storage';
+// import { persistStore, persistCombineReducers } from 'redux-persist';
+// import storage from 'redux-persist/es/storage';
 
-const config = {
-    key: 'root',
-    storage,
-    debug: true
-}
+// const config = {
+//     key: 'root',
+//     storage,
+//     debug: true
+// }
 
 export const ConfigureStore = () => {
     const store = createStore(
-        persistCombineReducers(config, {
+        combineReducers({
             history,
             users
         })
     );
 
-    const persistor = persistStore(store);
+    // const persistor = persistStore(store);
 
-    return { persistor, store };
+    // return { persistor, store };
+    return { store };
 };
