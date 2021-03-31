@@ -1,12 +1,24 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import logger from 'redux-logger';
+import { createStore } from 'redux';
+import { history } from './history';
+import { users } from './users';
+import { persistStore, persistCombineReducers } from 'redux-persist';
+import storage from 'redux-persist/es/storage';
 
-const configureStore = () => {
-    const store = createStore(
-        combineReducers({
-
-        }),
-        applyMiddleware(thunk, logger)
-    );
+const config = {
+    key: 'root',
+    storage,
+    debug: true
 }
+
+export const ConfigureStore = () => {
+    const store = createStore(
+        persistCombineReducers(config, {
+            history,
+            users
+        })
+    );
+
+    const persistor = persistStore(store);
+
+    return { persistor, store };
+};

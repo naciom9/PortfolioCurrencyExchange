@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import { Input, CheckBox } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 class Login extends Component {
 
@@ -19,22 +20,41 @@ class Login extends Component {
         title: 'Login'
     }
 
-    handleLogin() {
-        console.log(JSON.stringify(this.state));
-        if (this.state.remember) {
-            SecureStore.setItemAsync(
-                'userinfo',
-                JSON.stringify({
-                    username: this.state.username,
-                    password: this.state.password
-                })
-            ).catch(error => console.log('Could not save user info', error));
-        } else {
-            SecureStore.deleteItemAsync('userinfo').catch(
-                error => console.log('Could not delete user info', error)
-            );
+    // handleLogin() {
+    //     console.log(JSON.stringify(this.state));
+    //     if (this.state.remember) {
+    //         SecureStore.setItemAsync(
+    //             'userinfo',
+    //             JSON.stringify({
+    //                 username: this.state.username,
+    //                 password: this.state.password
+    //             })
+    //         ).catch(error => console.log('Could not save user info', error));
+    //     } else {
+    //         SecureStore.deleteItemAsync('userinfo').catch(
+    //             error => console.log('Could not delete user info', error)
+    //         );
+    //     }
+    // }
+
+    signIn = async () => {
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+            this.setState({ userInfo });
+        } catch (error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // user cancelled the login flow
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                // operation (e.g. sign in) is in progress already
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                // play services not available or outdated
+            } else {
+                // some other error happened
+            }
         }
-    }
+    };
+
 
     componentDidMount() {
         SecureStore.getItemAsync('userinfo')
@@ -76,7 +96,7 @@ class Login extends Component {
                 />
                 <View style={styles.formButton}>
                     <Button
-                        onPress={() => this.handleLogin()}
+                        onPress={() => this.signIn()}
                         title='Login'
                         color='#5637DD'
                     />

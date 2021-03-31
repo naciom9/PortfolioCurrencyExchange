@@ -9,9 +9,6 @@ import { Icon } from 'react-native-elements';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import SafeAreaView from 'react-native-safe-area-view';
 
-const mapDispatchToProps = {
-
-};
 
 const ExchangeNavigator = createStackNavigator(
     {
@@ -20,7 +17,7 @@ const ExchangeNavigator = createStackNavigator(
     {
         defaultNavigationOptions: ({ navigation }) => ({
             headerStyle: {
-                backgroundColor: "#5638DD"
+                backgroundColor: "#006064"
             },
             headerTintColor: '#fff',
             headerTitleStyle: {
@@ -42,7 +39,7 @@ const HistoryNavigator = createStackNavigator(
     {
         defaultNavigationOptions: ({ navigation }) => ({
             headerStyle: {
-                backgroundColor: "#5638DD"
+                backgroundColor: "#006064"
             },
             headerTintColor: '#fff',
             headerTitleStyle: {
@@ -65,7 +62,7 @@ const LoginNavigator = createStackNavigator(
     {
         defaultNavigationOptions: ({ navigation }) => ({
             headerStyle: {
-                backgroundColor: "#5638DD"
+                backgroundColor: "#006064"
             },
             headerTintColor: '#fff',
             headerTitleStyle: {
@@ -147,7 +144,7 @@ const MainNavigator = createDrawerNavigator(
     },
     {
         initialRouteName: 'Exchange',
-        drawerBackgroundColor: '#CEC8FF',
+        drawerBackgroundColor: '#A6E4EB',
         contentComponent: CustomDrawerContentComponent
     }
 );
@@ -174,7 +171,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     drawerHeader: {
-        backgroundColor: '#5637DD',
+        backgroundColor: '#006064',
         height: 140,
         alignItems: 'center',
         justifyContent: 'center',

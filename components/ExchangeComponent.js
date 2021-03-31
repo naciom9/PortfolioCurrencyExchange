@@ -15,13 +15,31 @@ class Exchange extends Component {
             fromCurrency: 'USD',
             toCurrency: 'RUB',
             original: 10,
-            converted: null
-
+            converted: null,
+            currencies: []
         };
     }
 
+    fetchCurrencies = () => {
+        return fetch("https://currency-converter5.p.rapidapi.com/currency/list", {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-key": "68be52b1b6mshc14b09eed881d8fp1c1f9ajsn952306a98f81",
+                "x-rapidapi-host": "currency-converter5.p.rapidapi.com"
+            }
+        })
+            .then(response => response.json())
+            .then(response => {
+                console.log("response currencies", Object.keys(response.currencies));
+                this.setState({ currencies: Object.keys(response.currencies) });
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
+
     onConvert = () => {
-        fetch(`https://currency-converter5.p.rapidapi.com/currency/convert?format=json&from=${this.state.fromCurrency}&to=${this.state.toCurrency}&amount=${this.state.input}`, {
+        return fetch(`https://currency-converter5.p.rapidapi.com/currency/convert?format=json&from=${this.state.fromCurrency}&to=${this.state.toCurrency}&amount=${this.state.input}`, {
             "method": "GET",
             "headers": {
                 "x-rapidapi-key": "68be52b1b6mshc14b09eed881d8fp1c1f9ajsn952306a98f81",
@@ -40,16 +58,8 @@ class Exchange extends Component {
     }
 
     componentDidMount() {
-        // Fetch code on Load to return the list of available currencies goes here
         console.log("component", this);
-        this.onConvert()
-            .then(userdata => {
-                const fecthedData = JSON.parse(userdata);
-                if (fecthedData) {
-                    this.setState({ fromCurrency: fecthedData.fromCurrency });
-                    this.setState({ toCurrency: fecthedData.toCurrency })
-                }
-            });
+        this.fetchCurrencies();
     }
 
     static navigationOptions = {
@@ -69,29 +79,25 @@ class Exchange extends Component {
                 </View> */}
                 <View style={styles.container}>
                     <View>
-                        <TextInput value={this.state.input} onChangeText={input => this.setState({ input })} placeholder="Input amount" />
+                        <TextInput style={styles.input} value={this.state.input} onChangeText={input => this.setState({ input })} placeholder="Input amount" />
                     </View>
                     <View>
                         <Text style={styles.text}>From:</Text>
-                        <Picker selectedValue={this.state.fromCurrency} onValueChange={fromCurrency => this.setState({ fromCurrency })}>
-                            <Picker.Item label="USD" value="USD" />
-                            <Picker.Item label="CAD" value="CAD" />
-                            <Picker.Item label="RUB" value="RUB" />
-
-                        </Picker>
+                        {this.state.currencies &&
+                            <Picker selectedValue={this.state.fromCurrency} onValueChange={fromCurrency => this.setState({ fromCurrency })}>
+                                {this.state.currencies.map(cur => <Picker.Item key={cur} label={cur} value={cur} />)}
+                            </Picker>
+                        }
                         <Text style={styles.text}>To:</Text>
                         <Picker selectedValue={this.state.toCurrency} onValueChange={toCurrency => this.setState({ toCurrency })}>
-                            <Picker.Item label="USD" value="USD" />
-                            <Picker.Item label="CAD" value="CAD" />
-                            <Picker.Item label="RUB" value="RUB" />
-
+                            {this.state.currencies.map(cur => <Picker.Item key={cur} label={cur} value={cur} />)}
                         </Picker>
                     </View>
                     <View>
                         <Button title="Convert" onPress={this.onConvert} />
                     </View>
                     {this.state.converted != null &&
-                        <Text> Converted amount is {this.state.converted}</Text>
+                        <Text style={styles.converted}> Converted amount is: {this.state.converted}</Text>
                     }
                 </View>
             </ScrollView>
@@ -105,17 +111,34 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 50,
-        backgroundColor: '#0bf',
+        backgroundColor: '#A6E4EB',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    input: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        marginBottom: 20,
+        fontSize: 16,
+        width: 200,
+        height: 30,
+        textAlign: 'center'
     },
     text: {
         color: '#000',
         fontSize: 15,
         fontWeight: 'bold',
         width: 100,
+        height: 40,
         marginBottom: -50
     },
+    converted: {
+        marginBottom: 20,
+        fontWeight: 'bold',
+        fontSize: 14,
+        height: 40,
+        textAlign: 'center'
+    }
 });
 const typography = StyleSheet.create({
     header: {
